@@ -1,11 +1,11 @@
 #This is the code for a program with an interactive interface that lets you choose a time zone, shows you the current time in 
-#the chosen time zone in Swahili and it reads it out for you!
+#the chosen time zone in Swahili, and it reads it out for you!
 
 #The commands for adding the listbox and scrollbox were taken from https://www.geeksforgeeks.org/scrollable-listbox-in-python-tkinter/.
 #The code for drawing the clock was largely inspired by this video by DJ Oamen: https://www.youtube.com/watch?v=TtdS8g7kGuo
-#Thank you to the authors of this resources!
+#Thank you to the authors of these resources!
 
-#Created by Victoria Ivanova and Fabienne Nicolaij for the Introduction to Voice Technology course, part of the Voice Technology master
+#Created by Victoria Ivanova and Fabiènne Nicolaij for the Introduction to Voice Technology course, part of the Voice Technology master
 #at the Rijksuniversiteit Groningen/Campus Fryslan.
 #27.10.2022
 
@@ -22,54 +22,54 @@ import os
 import glob
   
 
-# Creating the root window
+# Creating the root window.
 root = Tk()
 root.geometry('700x700')
 root.configure(background='linen')
 root.title("Speaking Swahili clock by Fabienne and Vicky")
   
-# Creating a listbox and attaching it to root window
+# Creating a listbox and attaching it to root window.
 listbox = Listbox(root)
   
-# Adding Listbox to the left side of root window
+# Adding Listbox to the left side of root window.
 listbox.pack(side = LEFT, fill = BOTH)
   
-# Creating a Scrollbar and attaching it to root window
+# Creating a Scrollbar and attaching it to root window.
 scrollbar = Scrollbar(root)
   
-# Adding Scrollbar to the right side of root window
+# Adding Scrollbar to the right side of root window.
 scrollbar.pack(side = RIGHT, fill = BOTH)
 
-#list of common timezones
+#list of common timezones.
 zons = pytz.common_timezones
   
-# Insert elements into the listbox
+# Insert elements into the listbox.
 for values in zons:
     listbox.insert(END, values)
       
-# Attaching Listbox to Scrollbar
+# Attaching Listbox to Scrollbar.
 listbox.config(yscrollcommand = scrollbar.set, background="linen", foreground="black")
 scrollbar.config(command = listbox.yview)
 
-# Creating dictionary that matches western hour to what it would be in Swahili/Kenya
+# Creating dictionary that matches western hour to what it would be in Swahili/Kenya.
 westhours = [*range(7, 20, 1)] + [20,21,22,23,0,1,2,3,4,5,6]
 kenyahours = [*range(1,13,1)] + [*range(1,13,1)]
 dict_kenya_time = dict(zip(westhours,kenyahours))
 
-# Creating dictionary that matches Swahili words for numbers to integers
+# Creating dictionary that matches Swahili words for numbers to integers.
 swahili_numbers = ["moja", "mbili", "tatu", "nne", "tano", "sita", "saba", "nane", "tisa", "kumi"]
 numbers = [*range(1,11,1)]
 swahili_numbers_dict = dict(zip(numbers, swahili_numbers))
 
-# Creating dictionary that matches Swahili words to English words
+# Creating dictionary that matches Swahili words to English words.
 swahili_words = ["dakika", "ishirini", "arobaini", "hamsini", "robo", "nusu", "na", "kasoro", "alasiri", "asubuhi", "jioni", "usiku", "mchana", "saa"]
 words = ["minute", 20, 40, 50, 15, 30, "and", "without", "afternoon", "morning", "evening", "night", "daytime", "hour"]
 swahili_words_dict = dict(zip(words, swahili_words))
 
-# Merging the dicts
+# Merging the dicts.
 swahili_vocab = swahili_numbers_dict | swahili_words_dict
 
-# Creating the labels with the welcome message
+# Creating the labels with the welcome message.
 welcome =Label(root,text="Welcome to our Swahili Speaking Clock!",bd=9, relief="flat",
     font=("Ariel",12,"bold"),bg="linen",fg="orange")
 swahili_language =Label(root,text="Swahili (or Kiswahili) is a Bantu language,\n spoken primarily in Tanzania, Kenya and Mozambique.",bd=9, relief="flat",
@@ -87,25 +87,25 @@ kenya =Label(root,text="",bd=9, relief="flat",
 swahili =Label(root,text="",bd=9, relief="flat",
     font=("Ariel",12,"bold"),bg="linen",fg="OrangeRed")
 
-# Posiotioning welcome labels
+# Posiotioning welcome labels.
 welcome.pack(padx=5, pady=(70, 5),fill=X)
 swahili_language.pack(padx=5, pady=10,fill=X)
 time_system.pack(padx=5, pady=5,fill=X)
 start.pack(padx=5, pady=5,fill=X)
 
-# Function to match Western time to time in Swahili system
+# Function to match Western time to time in Swahili system.
 def change_time_to_kenya(currentTime):
     currentTime = dict_kenya_time[currentTime]
     return currentTime
 
 # Function that gets the current time, changes it to the chosen time zone and sets the texts in the labels that tell you time in current timezone
-# and in the Swahili system
+# and in the Swahili system.
 def west_time():
     global minutesInZone, hoursInZone, morning_or_evening, swahili_morning_or_evening
-    # Get input from listbox and prettify it
+    # Get input from listbox and prettify it.
     listbox_value = [listbox.get(i) for i in listbox.curselection()]
     format_time_zone = str(listbox_value).replace("'", "").replace('[', '').replace(']', '')
-    # Get time (full, hours and minutes) in the chosen timezone
+    # Get time (full, hours and minutes) in the chosen timezone.
     time_zone = pytz.timezone(format_time_zone)
     currentTimeInZone = time_zone.localize(datetime.datetime.utcnow())
     currentTimeInZone = currentTimeInZone.replace(tzinfo=pytz.utc)
@@ -114,7 +114,7 @@ def west_time():
     minutesInZone = currentTimeInZone.strftime("%M")
     hoursInZone = currentTimeInZone.strftime("%H")
     
-    # Set whether its in the day time or night time in English and Swahili
+    # Set whether its in the day time or night time in English and Swahili.
     if int(hoursInZone) >= 7 and int(hoursInZone) <= 18:
         morning_or_evening = "in the day time"
         swahili_morning_or_evening = "asubuhi"
@@ -122,17 +122,17 @@ def west_time():
         morning_or_evening = "in the night time"
         swahili_morning_or_evening = "usiku"
     
-    # Destroy welcome labels
+    # Destroy welcome labels.
     swahili.config(text="")
     welcome.destroy()
     swahili_language.destroy()
     time_system.destroy()
     start.destroy()
     
-    # Gives the time in the Swahili system
+    # Gives the time in the Swahili system.
     full_kenya_time = str(change_time_to_kenya(int(hoursInZone))) + ":" + minutesInZone
     
-    # Positioning the labels and putting in the text
+    # Positioning the labels and putting in the text.
     west.pack(padx=5, pady=(90,5),fill=X)
     kenya.pack(padx=5, pady=5,fill=X)
     
@@ -141,7 +141,7 @@ def west_time():
     
     return minutesInZone, hoursInZone, swahili_morning_or_evening
 
-# Function that translates the time in the Swahili system to Swahili
+# Function that translates the time in the Swahili system to Swahili.
 def swahili_hours():
     global swahilihour
     kenya_time = str(change_time_to_kenya(int(hoursInZone)))
@@ -149,11 +149,11 @@ def swahili_hours():
         if int(kenya_time) <= 10:
             swahilihour = swahili_vocab[int(kenya_time)]
         elif int(kenya_time) > 10:
-            # The word for the tens plus "and" and the word for the ones
+            # The word for the tens plus "and" and the word for the ones.
             swahili_number_1 = swahili_vocab[int(kenya_time[0]) * 10]
             swahili_number_2 = swahili_vocab[int(kenya_time[1])]
             swahilihour = swahili_number_1 + " na " + swahili_number_2
-    # If later than 31 minutes past the hour, take the next hour, according to the system, as it is "next hour without some minutes"
+    # If later than 31 minutes past the hour, take the next hour, according to the system, as it is "next hour without some minutes".
     elif int(minutesInZone) >= 31:
         if int(kenya_time) < 10:
             swahilihour = swahili_vocab[int(kenya_time)+1]
@@ -172,7 +172,7 @@ def swahili_hours():
     return swahilihour
 
 
-# Function to translate the minutes to Shahili
+# Function to translate the minutes to Shahili.
 def swahili_time_complete():
     global swahilitime
     swahili_morning_evening = swahili_morning_or_evening
@@ -249,7 +249,7 @@ def draw_clock():
     wn.setup(width=600, height=600)
     wn.title("Clock")
 
-    # Set pensise.
+    # Set pensize.
     pen.hideturtle()
     pen.speed(0)
     pen.pensize(3)
@@ -264,7 +264,7 @@ def draw_clock():
     pen.circle(210)
     pen.end_fill()
 
-    #Draw another circle
+    #Draw another circle.
     pen.up()
     pen.goto(0,210)
     pen.setheading(180)
@@ -328,7 +328,7 @@ def play_audio():
         filename = data[:, 0]
         list_of_files.append(filename)
 
-    # Zip the lists tp create an audio dictionary, where the keys are the words (from the file names) and the values the files.
+    # Zip the lists to create an audio dictionary, where the keys are the words (from the file names) and the values the files.
     audio_dictionary = dict(zip(list_of_file_names, list_of_files))
 
     # From the translation of the time to Swahili, get all the words (in lowercase).
@@ -336,7 +336,7 @@ def play_audio():
     kiswahilitime = kiswahilitime.replace(".", "")
     list_of_words = kiswahilitime.split()
 
-    # Read the audio file for each wors and concatenate
+    # Read the audio file for each word and concatenate.
     tell_time = [audio_dictionary["saa"][0]] # Set the datatype of the array with one element of the audio arrays which is int16.
     for word in list_of_words:
         tell_time = np.concatenate((tell_time, audio_dictionary[word]))
